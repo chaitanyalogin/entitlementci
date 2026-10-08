@@ -1,0 +1,61 @@
+{
+  "date": "2026-10-08T15:17:08.700Z",
+  "base": "https://api-production-48225.up.railway.app",
+  "conclusion": "PASS",
+  "checks": [
+    {
+      "name": "Hosted mode ready, authenticated controls, and origin protection",
+      "status": "PASS"
+    },
+    {
+      "name": "Visitor gets a private workspace without a shared password",
+      "status": "PASS"
+    },
+    {
+      "name": "Repeated setup is idempotent and invalid CSRF is rejected",
+      "status": "PASS"
+    },
+    {
+      "name": "Healthy sample observations create no violations",
+      "status": "PASS"
+    },
+    {
+      "name": "Live SDK and worker detect the upgrade bug",
+      "status": "PASS"
+    },
+    {
+      "name": "Repeated bug reports group into the same incident",
+      "status": "PASS"
+    },
+    {
+      "name": "Regression fails on actual broken sample state",
+      "status": "PASS"
+    },
+    {
+      "name": "Visitors cannot read each other's incidents or test results",
+      "status": "PASS"
+    },
+    {
+      "name": "Downgrade and numeric limit bugs are also detected",
+      "status": "PASS"
+    },
+    {
+      "name": "Fix resolves all incidents and passes sixteen regression checks",
+      "status": "PASS"
+    },
+    {
+      "name": "Existing organization can create sandbox without changing its real project",
+      "status": "PASS"
+    },
+    {
+      "name": "Signing out invalidates the visitor session",
+      "status": "PASS"
+    }
+  ],
+  "fixtureOrganizations": [
+    "cmuzoct5w001zld010npilgpd",
+    "cmuzofmm4007xld01mbd30lw1",
+    "cmuzohcfc00crld01x6g89xcw"
+  ],
+  "fixturePolicy": "Isolated synthetic organizations contain only sample data; test sessions ended. No passwords, session tokens, or SDK secrets recorded."
+}

@@ -1,5 +1,5 @@
 {
-  "date": "2026-10-08T08:11:47.516Z",
+  "date": "2026-10-08T15:20:32.751Z",
   "base": "https://api-production-48225.up.railway.app",
   "conclusion": "PASS",
   "checks": [
@@ -40,7 +40,7 @@
       "status": "PASS"
     },
     {
-      "name": "CSRF rejection and disabled demo controls",
+      "name": "CSRF rejection protects catalog and demo controls",
       "status": "PASS"
     },
     {
@@ -54,12 +54,12 @@
   ],
   "fixtures": [
     {
-      "organizationId": "cmuz98syp0001lo01l09m59dh",
-      "userId": "cmuz98syl0000lo015zpxa652"
+      "organizationId": "cmuzokjjg00f9ld012bcowwzu",
+      "userId": "cmuzokjj800f8ld013pwrjvzk"
     },
     {
-      "organizationId": "cmuz9bcnm001blo01kb1l8vp1",
-      "userId": "cmuz9bcnj001alo01l0fmvixd"
+      "organizationId": "cmuzomukh00gjld010893go5o",
+      "userId": "cmuzomukb00gild01sj7dvgk9"
     }
   ],
   "fixturePolicy": "Two synthetic organizations remain as verification evidence. Passwords are discarded, SDK key revoked and sessions ended."
