@@ -169,13 +169,18 @@ await check("Upgrade bug creates real violations", async () => {
   });
   assert.equal(r.res.status, 200, JSON.stringify(r.data));
   const rows = await poll(async () => {
-    const x = (await owner("/v1/violations")).data;
-    return x.some(
+    const x = (await owner("/v1/violations")).data.filter(
       (v) =>
         v.customer.externalCustomerId === "cus_demo_upgrade_bug" &&
-        v.featureKey === "sso" &&
         v.status === "OPEN",
-    )
+    );
+    return x.some((v) => v.featureKey === "sso") &&
+      x.some(
+        (v) =>
+          v.featureKey === "api_requests" &&
+          v.expectedValue === 500000 &&
+          v.observedValue === 50000,
+      )
       ? x
       : null;
   });
