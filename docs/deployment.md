@@ -20,6 +20,6 @@ Run `npm ci`, `npm run db:generate`, `npm run build`, checks and `npm run db:dep
 
 ## Release gates
 
-Execute CI against native PostgreSQL, the Playwright flow, migration upgrades, queue outage recovery, parallel customer updates and load tests. Implement real email delivery and address token redemption concurrency before relying on recovery workflows. Exercise a backup restore, alert delivery and rollback. Define latency and availability targets from measured results; no throughput or availability claims were measured for this release.
+CI against native PostgreSQL and the Playwright flow passed in [run #3](https://github.com/chaitanyalogin/entitlementci/actions/runs/37744827919). Migration upgrade paths, queue outage recovery, parallel customer updates and load tests remain release gates. Implement real email delivery and address token redemption concurrency before relying on recovery workflows. Exercise a backup restore, alert delivery and rollback. Define latency and availability targets from measured results; no throughput or availability claims were measured for this release.
 
 Retain the previous image and use backward compatible migrations. Application rollback does not automatically undo schema changes.

@@ -27,22 +27,22 @@ Local owner: `owner@demo.entitlementci.test`. Password: `DemoPassword!123`. Thes
 
 ## Components
 
-| Directory | Responsibility |
-| --- | --- |
-| apps/web | React dashboard, administration, evidence and drift lab |
-| apps/api | Sessions, RBAC, tenant checks, SDK ingestion and webhook verification |
-| apps/demo-taskflow | Separate application whose actual access can intentionally drift |
+| Directory                  | Responsibility                                                                    |
+| -------------------------- | --------------------------------------------------------------------------------- |
+| apps/web                   | React dashboard, administration, evidence and drift lab                           |
+| apps/api                   | Sessions, RBAC, tenant checks, SDK ingestion and webhook verification             |
+| apps/demo-taskflow         | Separate application whose actual access can intentionally drift                  |
 | workers/entitlement-worker | Background comparison, webhook normalization, recovery and HTTP regression checks |
-| packages/engine | Transactional state updates and incident lifecycle |
-| packages/shared | Pure deterministic comparison and shared contracts |
-| packages/node-sdk | Server side decision and usage reporting |
-| tests | Unit, security, HTTP integration and authored browser checks |
+| packages/engine            | Transactional state updates and incident lifecycle                                |
+| packages/shared            | Pure deterministic comparison and shared contracts                                |
+| packages/node-sdk          | Server side decision and usage reporting                                          |
+| tests                      | Unit, security, HTTP integration and authored browser checks                      |
 
 ## Verification
 
-The release builds and passes type checking, lint and seven unit/security tests. Eighteen API, SDK, worker and database integration checks passed using PGlite PostgreSQL WASM and real Redis. The public demo was verified in a browser through failure, correction and passing regression. The dependency audit reported zero known vulnerabilities on 8 October 2026.
+GitHub Actions [CI run #3](https://github.com/chaitanyalogin/entitlementci/actions/runs/37744827919) passed on 8 October 2026 for application commit `13091e4ed01f0c09e340f1b3dcbc60870f34f271`. It installed from the lockfile, built the workspace, applied both migrations and seeded PostgreSQL 17, then passed type checking, lint, seven unit/security tests, eighteen integration checks with PostgreSQL and Redis, and one Playwright browser test. The browser test covers sign in, actual upgrade failure, incident resolution, sign out, session rejection and signing back in. The dependency audit reported zero known vulnerabilities. The workflow retains verification evidence as an artifact.
 
-The user confirmed local Docker startup and the demo flow on Windows after delivery. Native PostgreSQL concurrency, live Stripe delivery and the authored Playwright suite were not executed in the build environment. See [the validation report](docs/final-validation-report.md) for evidence and limits. This is a tested portfolio application with production engineering foundations. Commercial production readiness requires the remaining deployment and operational validation.
+Earlier verification used PGlite PostgreSQL WASM and real Redis. The public reviewer demo was verified separately in a browser, and the user confirmed local Docker startup on Windows. Native PostgreSQL contention, live Stripe delivery, load tests and production operations remain unverified. See [the validation report](docs/final-validation-report.md) for limits. This is a tested portfolio application with production engineering foundations. Commercial production readiness requires the remaining deployment and operational validation.
 
 ## Development
 

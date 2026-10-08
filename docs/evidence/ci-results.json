@@ -1,0 +1,30 @@
+{
+  "date": "2026-10-08",
+  "repository": "chaitanyalogin/entitlementci",
+  "application_commit": "13091e4ed01f0c09e340f1b3dcbc60870f34f271",
+  "workflow_run_id": 37744827919,
+  "workflow_run_url": "https://github.com/chaitanyalogin/entitlementci/actions/runs/37744827919",
+  "job_id": 113203726874,
+  "conclusion": "success",
+  "postgresql": "17",
+  "redis": "7",
+  "checks": {
+    "build": "PASS",
+    "migrations_and_seed": "PASS",
+    "typecheck": "PASS",
+    "lint": "PASS",
+    "unit_security_tests": 7,
+    "integration_tests": 18,
+    "playwright_tests": 1,
+    "known_dependency_vulnerabilities": 0
+  },
+  "artifact": {
+    "id": 11535144456,
+    "name": "verification-evidence"
+  },
+  "limits": [
+    "Application Docker image build was not automated in this workflow.",
+    "Dedicated PostgreSQL contention and resilience tests were not executed.",
+    "Only the static reviewer frontend is publicly deployed."
+  ]
+}

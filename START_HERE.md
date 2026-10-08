@@ -30,11 +30,11 @@ docker compose ps
 docker compose logs --tail=100 setup api worker taskflow
 ```
 
-| Application | Address | Local login |
-| --- | --- | --- |
-| EntitlementCI | http://localhost:5173 | owner@demo.entitlementci.test |
-| TaskFlow | http://localhost:4100 | demo@taskflow.test |
-| API documentation | http://localhost:4000/docs | documentation route |
+| Application       | Address                    | Local login                   |
+| ----------------- | -------------------------- | ----------------------------- |
+| EntitlementCI     | http://localhost:5173      | owner@demo.entitlementci.test |
+| TaskFlow          | http://localhost:4100      | demo@taskflow.test            |
+| API documentation | http://localhost:4000/docs | documentation route           |
 
 The seeded password for both applications is `DemoPassword!123`. The developer account is `developer@demo.entitlementci.test` with the same sandbox password.
 
@@ -57,4 +57,4 @@ Learn `packages/shared/src/comparison.ts`, then `packages/node-sdk/src/index.ts`
 
 ## Production status
 
-The code has tenant checks, role checks, cookie sessions, CSRF protection, hashed API keys, webhook signatures, retries, recovery and migrations. It passed seven unit/security tests and eighteen integration checks. Native PostgreSQL concurrency, Docker execution, live Stripe, load testing, backup restore and production infrastructure validation remain necessary. Production email delivery is not implemented. The public deployment is the reviewer demo only.
+The code has tenant checks, role checks, cookie sessions, CSRF protection, hashed API keys, webhook signatures, retries, recovery and migrations. GitHub [CI run #3](https://github.com/chaitanyalogin/entitlementci/actions/runs/37744827919) passed seven unit/security tests, eighteen integration checks with native PostgreSQL and Redis, and the browser sign in, failure, correction and sign out flow. Dedicated PostgreSQL contention tests, automated application Docker image verification, live Stripe, load testing, backup restore and production infrastructure validation remain necessary. Production email delivery is not implemented. The public deployment is the reviewer demo only.
