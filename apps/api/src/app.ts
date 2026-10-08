@@ -23,6 +23,7 @@ import { testRoutes } from "./routes/tests.js";
 import { AppError, errorBody } from "./utils/http.js";
 import { prisma } from "./db.js";
 import { connection } from "./jobs.js";
+import { registerDashboard } from "./dashboard.js";
 
 export async function buildApp() {
   const app = Fastify({
@@ -82,15 +83,13 @@ export async function buildApp() {
         },
       });
     if ((error as any).code === "P2002")
-      return reply
-        .code(409)
-        .send({
-          error: {
-            code: "ALREADY_EXISTS",
-            message: "This record already exists",
-            requestId: request.id,
-          },
-        });
+      return reply.code(409).send({
+        error: {
+          code: "ALREADY_EXISTS",
+          message: "This record already exists",
+          requestId: request.id,
+        },
+      });
     request.log.error({ err: error }, "request failed");
     return reply.code(500).send({
       error: {
@@ -120,5 +119,6 @@ export async function buildApp() {
   await integrationRoutes(app);
   await webhookRoutes(app);
   await testRoutes(app);
+  if (process.env.SERVE_WEB === "true") await registerDashboard(app);
   return app;
 }

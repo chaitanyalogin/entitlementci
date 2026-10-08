@@ -1,10 +1,12 @@
 import "dotenv/config";
+import { loadConfig } from "@entitlementci/config";
 import { Worker, Queue } from "bullmq";
 import { Redis } from "ioredis";
 import { createServer } from "node:http";
 import { prisma } from "./db.js";
 import { compareObservation, processWebhook } from "@entitlementci/engine";
 import { runSynthetic } from "./synthetic.js";
+loadConfig();
 const connection = new Redis(
   process.env.REDIS_URL ?? "redis://localhost:6379",
   { maxRetriesPerRequest: null },
@@ -115,7 +117,10 @@ const health = createServer(async (req, res) => {
     res.end(JSON.stringify({ status: "not_ready" }));
   }
 });
-health.listen(Number(process.env.WORKER_HEALTH_PORT ?? 4200), "0.0.0.0");
+health.listen(
+  Number(process.env.PORT ?? process.env.WORKER_HEALTH_PORT ?? 4200),
+  "0.0.0.0",
+);
 async function close() {
   clearInterval(recovery);
   health.close();

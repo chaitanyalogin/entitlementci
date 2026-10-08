@@ -6,6 +6,12 @@ The public reviewer demo is deployed at https://entitlementci-review.vercel.app/
 
 ## Local containers
 
+The full backend has a Railway deployment path in
+[`infrastructure/railway/README.md`](../infrastructure/railway/README.md).
+Its dedicated Node image serves the dashboard with the API, supports host
+assigned ports and includes a separate worker healthcheck. Check the latest
+deployment evidence before claiming that backend is publicly deployed.
+
 Run `node scripts/setup.mjs` then `docker compose up --build -d`. The root Dockerfile defines build, runtime and web stages. Compose starts PostgreSQL 17, Redis 7 with AOF persistence, a one shot migration and seed service, API, worker, TaskFlow and nginx. Ports bind to loopback. This is a development sandbox with default database credentials and development cookie settings.
 
 The setup service must finish successfully before the API and demo start. It creates an SDK key in a shared Docker volume. The worker and API reuse the same built runtime image. This configuration was statically reviewed in the build environment and later confirmed working locally by the user on Windows.

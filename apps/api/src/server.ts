@@ -6,7 +6,7 @@ import { closeDatabase } from "./db.js";
 import { connection, entitlementQueue } from "./jobs.js";
 
 const app = await buildApp();
-const port = Number(process.env.API_PORT ?? 4000);
+const port = Number(process.env.PORT ?? process.env.API_PORT ?? 4000);
 await app.listen({ port, host: process.env.BIND_HOST ?? "0.0.0.0" });
 
 const shutdown = async (signal: string) => {

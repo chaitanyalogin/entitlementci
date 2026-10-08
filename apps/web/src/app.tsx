@@ -27,8 +27,10 @@ function Login() {
   const [register, setRegister] = useState(false);
   const [org, setOrg] = useState("");
   const nav = useNavigate();
-  const [email, setEmail] = useState("owner@demo.entitlementci.test");
-  const [pw, setPw] = useState("DemoPassword!123");
+  const [email, setEmail] = useState(
+    import.meta.env.DEV ? "owner@demo.entitlementci.test" : "",
+  );
+  const [pw, setPw] = useState(import.meta.env.DEV ? "DemoPassword!123" : "");
   const [error, setError] = useState("");
   async function submit(e: any) {
     e.preventDefault();

@@ -9,6 +9,7 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
+    "@entitlementci/config": "1.0.0",
     "@entitlementci/shared": "1.0.0",
     "@prisma/client": "6.19.3",
     "bullmq": "^5.58.0",

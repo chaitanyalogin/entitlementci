@@ -1,0 +1,13 @@
+FROM node:24-alpine AS build
+WORKDIR /app
+RUN apk add --no-cache openssl
+COPY . .
+RUN npm ci && npm run db:generate && npm run build
+
+FROM node:24-alpine AS runtime
+WORKDIR /app
+ENV NODE_ENV=production
+RUN apk add --no-cache openssl
+COPY --from=build --chown=node:node /app /app
+USER node
+CMD ["node", "apps/api/dist/server.js"]
