@@ -1,0 +1,8 @@
+node_modules
+**/dist
+**/dist-web
+review-dist
+package-lock.json
+*.zip
+.env
+.taskflow-api-key

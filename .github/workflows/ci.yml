@@ -1,0 +1,72 @@
+name: CI
+on:
+  push:
+  pull_request:
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: entitlementci
+          POSTGRES_PASSWORD: entitlementci
+          POSTGRES_DB: entitlementci
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U entitlementci -d entitlementci"
+          --health-interval 5s --health-timeout 3s --health-retries 20
+      redis:
+        image: redis:7-alpine
+        ports: ["6379:6379"]
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 5s --health-timeout 3s --health-retries 20
+    env:
+      DATABASE_URL: postgresql://entitlementci:entitlementci@localhost:5432/entitlementci?schema=public
+      TASKFLOW_DATABASE_URL: postgresql://entitlementci:entitlementci@localhost:5432/entitlementci?schema=public
+      REDIS_URL: redis://localhost:6379
+      SESSION_SECRET: ci-session-secret-aaaaaaaaaaaaaaaaaaaaaaaa
+      API_KEY_PEPPER: ci-api-key-pepper-bbbbbbbbbbbbbbbbbbbb
+      TASKFLOW_SERVICE_TOKEN: ci-taskflow-service-cccccccccccccccccccc
+      DEMO_STRIPE_WEBHOOK_SECRET: whsec_ci_fixture_only
+      CORS_ORIGIN: http://localhost:5173
+      PUBLIC_WEB_URL: http://localhost:5173
+      PUBLIC_API_URL: http://localhost:4000
+      TASKFLOW_URL: http://localhost:4100
+      ENABLE_DEMO: "true"
+      SERVE_STATIC: "true"
+      NODE_ENV: test
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: node scripts/setup.mjs
+      - run: npm run db:generate
+      - run: npm run build
+      - run: npm run db:deploy && npm run db:seed
+      - run: npm run typecheck && npm run lint && npm test
+      - run: npm audit --audit-level=high
+      - run: npx playwright install --with-deps chromium
+      - name: Verify API, worker, SDK and UI
+        run: |
+          mkdir -p ci-logs
+          node --env-file=.env apps/api/dist/server.js > ci-logs/api.log 2>&1 &
+          node --env-file=.env workers/entitlement-worker/dist/worker.js > ci-logs/worker.log 2>&1 &
+          (cd apps/demo-taskflow && node --env-file=../../.env dist/server.js) > ci-logs/taskflow.log 2>&1 &
+          (cd apps/web && ../../node_modules/.bin/vite --host 127.0.0.1) > ci-logs/web.log 2>&1 &
+          node scripts/wait-ready.mjs
+          npm run test:integration
+          npm run test:e2e
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: verification-evidence
+          path: |
+            docs/evidence
+            tests/playwright-report
+            tests/test-results
+            ci-logs

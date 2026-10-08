@@ -1,0 +1,14 @@
+node_modules
+**/node_modules
+**/dist
+**/dist-web
+.env
+.env.*
+!.env.example
+.taskflow-api-key
+.git
+playwright-report
+test-results
+review-dist
+*.zip
+*.log

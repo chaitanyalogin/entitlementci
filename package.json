@@ -1,0 +1,61 @@
+{
+  "name": "entitlementci",
+  "private": true,
+  "version": "1.0.0",
+  "packageManager": "npm@11.9.0",
+  "workspaces": [
+    "apps/*",
+    "packages/*",
+    "workers/*",
+    "tests"
+  ],
+  "scripts": {
+    "dev": "node scripts/dev.mjs",
+    "dev:web": "npm --workspace apps/web run dev",
+    "dev:api": "npm --workspace apps/api run dev",
+    "dev:worker": "npm --workspace workers/entitlement-worker run dev",
+    "dev:taskflow": "npm --workspace apps/demo-taskflow run dev",
+    "build": "npm run build:packages && npm run build:api && npm run build:worker && npm run build:web && npm run build:taskflow",
+    "build:packages": "npm run build --workspace @entitlementci/shared && npm run build --workspace @entitlementci/validation && npm run build --workspace @entitlementci/config && npm run build --workspace @entitlementci/node && npm run build --workspace @entitlementci/engine",
+    "build:api": "npm --workspace apps/api run build",
+    "build:worker": "npm --workspace workers/entitlement-worker run build",
+    "build:web": "npm --workspace apps/web run build",
+    "build:taskflow": "npm --workspace apps/demo-taskflow run build",
+    "lint": "eslint .",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "test": "npm --workspace tests run test:unit",
+    "test:e2e": "npm --workspace tests run test:e2e",
+    "db:migrate": "node scripts/database.mjs migrate",
+    "db:deploy": "node scripts/database.mjs deploy",
+    "db:generate": "node scripts/database.mjs generate",
+    "db:seed": "node scripts/database.mjs seed",
+    "validate:repo": "node scripts/validate-repo.mjs",
+    "validate:syntax": "node scripts/check-ts-syntax.mjs",
+    "package": "npm run validate:repo && npm run validate:syntax && node scripts/package-release.mjs",
+    "setup": "node scripts/setup.mjs",
+    "format": "prettier --write .",
+    "predev": "npm run build:packages",
+    "test:integration": "node tests/integration/run.mjs",
+    "maintenance:retention": "node scripts/retention.mjs",
+    "build:review": "npm run build --workspace @entitlementci/shared && node scripts/build-review.mjs"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "@types/pg": "^8.23.1",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "concurrently": "^9.1.2",
+    "eslint": "^9.0.0",
+    "prettier": "^3.9.9",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.0.0"
+  },
+  "engines": {
+    "node": ">=24"
+  },
+  "overrides": {
+    "@fastify/static": "^10.1.5",
+    "deepmerge-ts": "^8.0.0",
+    "shell-quote": "^1.11.0"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "name": "@entitlementci/tests",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test:e2e": "playwright test",
+    "test:unit": "vitest run"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.55.0",
+    "vitest": "^5.0.2"
+  }
+}

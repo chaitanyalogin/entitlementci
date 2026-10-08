@@ -1,0 +1,85 @@
+# Local portfolio demo. Use managed credentials and TLS for a public deployment.
+x-app: &app
+  build:
+    context: .
+    target: runtime
+  env_file: .env
+  environment: &env
+    NODE_ENV: development
+    DATABASE_URL: postgresql://entitlementci:entitlementci@postgres:5432/entitlementci?schema=public
+    TASKFLOW_DATABASE_URL: postgresql://entitlementci:entitlementci@postgres:5432/entitlementci?schema=public
+    REDIS_URL: redis://redis:6379
+    PUBLIC_API_URL: http://api:4000
+    TASKFLOW_URL: http://taskflow:4100
+    TASKFLOW_KEY_FILE: /run/entitlementci/sdk-key
+  volumes: [demo_secrets:/run/entitlementci]
+services:
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: entitlementci
+      POSTGRES_PASSWORD: entitlementci
+      POSTGRES_DB: entitlementci
+    ports: ["127.0.0.1:5432:5432"]
+    volumes: [pgdata:/var/lib/postgresql/data]
+    healthcheck:
+      test: [CMD-SHELL, "pg_isready -U entitlementci -d entitlementci"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+  redis:
+    image: redis:7-alpine
+    ports: ["127.0.0.1:6379:6379"]
+    volumes: [redisdata:/data]
+    command: [redis-server, --appendonly, "yes"]
+    healthcheck:
+      test: [CMD, redis-cli, ping]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+  setup:
+    <<: *app
+    user: root
+    working_dir: /app/apps/api
+    command:
+      [
+        sh,
+        -c,
+        "../../node_modules/.bin/prisma migrate deploy && ../../node_modules/.bin/tsx prisma/seed.ts && chown 1000:1000 /run/entitlementci/sdk-key",
+      ]
+    depends_on:
+      postgres: { condition: service_healthy }
+  api:
+    <<: *app
+    command: [node, apps/api/dist/server.js]
+    ports: ["127.0.0.1:4000:4000"]
+    depends_on:
+      setup: { condition: service_completed_successfully }
+      redis: { condition: service_healthy }
+  worker:
+    <<: *app
+    command: [node, workers/entitlement-worker/dist/worker.js]
+    depends_on:
+      setup: { condition: service_completed_successfully }
+      redis: { condition: service_healthy }
+  taskflow:
+    <<: *app
+    working_dir: /app/apps/demo-taskflow
+    environment:
+      <<: *env
+      NODE_ENV: development
+      SERVE_STATIC: "true"
+    command: [node, dist/server.js]
+    ports: ["127.0.0.1:4100:4100"]
+    depends_on:
+      setup: { condition: service_completed_successfully }
+  web:
+    build:
+      context: .
+      target: web
+    ports: ["127.0.0.1:5173:80"]
+    depends_on: [api]
+volumes:
+  pgdata:
+  redisdata:
+  demo_secrets:

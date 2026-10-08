@@ -1,0 +1,78 @@
+{
+  "date": "2026-10-08T06:36:59.342Z",
+  "database": "PGlite PostgreSQL WASM with real Redis; native PostgreSQL concurrency still requires CI",
+  "results": [
+    {
+      "name": "Cross tenant read returns 404",
+      "status": "PASS"
+    },
+    {
+      "name": "Cross tenant API key creation denied",
+      "status": "PASS"
+    },
+    {
+      "name": "Developer cannot create projects",
+      "status": "PASS"
+    },
+    {
+      "name": "CSRF mismatch denied",
+      "status": "PASS"
+    },
+    {
+      "name": "Malformed SDK key denied",
+      "status": "PASS"
+    },
+    {
+      "name": "API key creation returns secret once",
+      "status": "PASS"
+    },
+    {
+      "name": "SDK event reaches queue",
+      "status": "PASS"
+    },
+    {
+      "name": "Revoked key cannot ingest",
+      "status": "PASS"
+    },
+    {
+      "name": "Upgrade bug creates real violations",
+      "status": "PASS"
+    },
+    {
+      "name": "Repeated observations group incidents",
+      "status": "PASS"
+    },
+    {
+      "name": "Regression detects actual broken SSO",
+      "status": "PASS"
+    },
+    {
+      "name": "Fix auto resolves incidents",
+      "status": "PASS"
+    },
+    {
+      "name": "Regression passes after real fix",
+      "status": "PASS"
+    },
+    {
+      "name": "Duplicate signed webhook preserves version",
+      "status": "PASS"
+    },
+    {
+      "name": "Older signed webhook preserves newer state",
+      "status": "PASS"
+    },
+    {
+      "name": "Forged webhook rejected",
+      "status": "PASS"
+    },
+    {
+      "name": "Tenant cannot modify another customer",
+      "status": "PASS"
+    },
+    {
+      "name": "Readiness verifies database and Redis",
+      "status": "PASS"
+    }
+  ]
+}

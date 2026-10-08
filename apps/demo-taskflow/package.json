@@ -1,0 +1,30 @@
+{
+  "name": "@entitlementci/taskflow",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently -n api,web \"tsx watch src/server.ts\" \"vite --host 0.0.0.0 --port 4101\"",
+    "build": "npm run build:server && npm run build:web",
+    "build:server": "tsc -p tsconfig.json",
+    "build:web": "vite build --outDir dist-web",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@entitlementci/node": "1.0.0",
+    "@fastify/cors": "^11.0.2",
+    "fastify": "^5.5.0",
+    "@fastify/static": "^8.2.0",
+    "@fastify/cookie": "^11.0.2",
+    "pg": "^8.16.3",
+    "dotenv": "^16.6.1",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.2",
+    "typescript": "^5.8.3",
+    "vite": "^7.1.5",
+    "@vitejs/plugin-react": "^5.0.2"
+  }
+}

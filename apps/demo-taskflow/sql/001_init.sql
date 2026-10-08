@@ -1,0 +1,13 @@
+CREATE TABLE IF NOT EXISTS tf_users (id text primary key, email text unique not null, password_hash text not null, created_at timestamptz not null default now());
+CREATE TABLE IF NOT EXISTS tf_organizations (id text primary key, name text not null, created_at timestamptz not null default now());
+CREATE TABLE IF NOT EXISTS tf_projects (id text primary key, organization_id text not null references tf_organizations(id) on delete cascade, name text not null, created_at timestamptz not null default now());
+CREATE TABLE IF NOT EXISTS tf_plans (key text primary key, name text not null, analytics boolean not null, advanced_reports boolean not null, sso boolean not null, api_limit integer not null);
+CREATE TABLE IF NOT EXISTS tf_customers (external_id text primary key, organization_id text not null references tf_organizations(id) on delete cascade, email_hash text, plan_key text not null references tf_plans(key), created_at timestamptz not null default now(), updated_at timestamptz not null default now());
+CREATE TABLE IF NOT EXISTS tf_tasks (id bigserial primary key, organization_id text not null references tf_organizations(id) on delete cascade, customer_id text references tf_customers(external_id), title text not null, completed boolean not null default false, created_at timestamptz not null default now());
+CREATE TABLE IF NOT EXISTS tf_sessions (id text primary key, user_id text not null references tf_users(id) on delete cascade, token_hash text unique not null, expires_at timestamptz not null, created_at timestamptz not null default now());
+CREATE TABLE IF NOT EXISTS tf_settings (key text primary key, value jsonb not null);
+INSERT INTO tf_plans(key,name,analytics,advanced_reports,sso,api_limit) VALUES ('free','Free',false,false,false,1000),('pro','Pro',true,false,false,50000),('enterprise','Enterprise',true,true,true,500000) ON CONFLICT (key) DO NOTHING;
+INSERT INTO tf_organizations(id,name) VALUES ('tf_org_demo','TaskFlow Demo') ON CONFLICT (id) DO NOTHING;
+INSERT INTO tf_projects(id,organization_id,name) VALUES ('tf_project_demo','tf_org_demo','TaskFlow Production') ON CONFLICT (id) DO NOTHING;
+INSERT INTO tf_customers(external_id,organization_id,email_hash,plan_key) VALUES ('cus_demo_healthy','tf_org_demo',NULL,'pro'),('cus_demo_upgrade_bug','tf_org_demo',NULL,'pro'),('cus_demo_downgrade_bug','tf_org_demo',NULL,'enterprise'),('cus_demo_limit_bug','tf_org_demo',NULL,'enterprise') ON CONFLICT (external_id) DO NOTHING;
+INSERT INTO tf_settings(key,value) VALUES ('bug_scenario','"none"') ON CONFLICT (key) DO NOTHING;

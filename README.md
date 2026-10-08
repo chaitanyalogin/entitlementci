@@ -1,2 +1,75 @@
-# entitlementci
-SaaS entitlement drift verification with a Node SDK, transactional comparison, signed webhooks and regression testing.
+# EntitlementCI
+
+A SaaS reliability project that detects the difference between subscription promises and the access an application actually enforces.
+
+**Live reviewer demo:** https://entitlementci-review.vercel.app/
+
+The public demo runs the shared deterministic comparison engine with sample data in the browser. The complete local application adds Fastify, PostgreSQL, Prisma, Redis, BullMQ, a Node SDK, signed Stripe webhooks and a separate TaskFlow application. The hosted demo does not contain a deployed production backend.
+
+## Why this project is distinctive
+
+A customer upgrades to Enterprise but the application still denies SSO and advanced reports and enforces a Pro API limit. EntitlementCI records those decisions, compares them with expected access, groups the discrepancies into incidents, and resolves them when fresh observations match. Regression checks exercise the actual TaskFlow HTTP service before and after the correction.
+
+This creates useful interview discussions about event ordering, duplicate delivery, tenant isolation, queue recovery, transaction boundaries and failure modes.
+
+## Start
+
+Read [START_HERE.md](START_HERE.md). Use Node 24 and Docker Desktop with Linux containers.
+
+```sh
+node scripts/setup.mjs
+docker compose up --build -d
+```
+
+Dashboard: http://localhost:5173. API documentation: http://localhost:4000/docs. TaskFlow: http://localhost:4100.
+
+Local owner: `owner@demo.entitlementci.test`. Password: `DemoPassword!123`. These credentials are for the local seeded sandbox only.
+
+## Components
+
+| Directory | Responsibility |
+| --- | --- |
+| apps/web | React dashboard, administration, evidence and drift lab |
+| apps/api | Sessions, RBAC, tenant checks, SDK ingestion and webhook verification |
+| apps/demo-taskflow | Separate application whose actual access can intentionally drift |
+| workers/entitlement-worker | Background comparison, webhook normalization, recovery and HTTP regression checks |
+| packages/engine | Transactional state updates and incident lifecycle |
+| packages/shared | Pure deterministic comparison and shared contracts |
+| packages/node-sdk | Server side decision and usage reporting |
+| tests | Unit, security, HTTP integration and authored browser checks |
+
+## Verification
+
+The release builds and passes type checking, lint and seven unit/security tests. Eighteen API, SDK, worker and database integration checks passed using PGlite PostgreSQL WASM and real Redis. The public demo was verified in a browser through failure, correction and passing regression. The dependency audit reported zero known vulnerabilities on 8 October 2026.
+
+The user confirmed local Docker startup and the demo flow on Windows after delivery. Native PostgreSQL concurrency, live Stripe delivery and the authored Playwright suite were not executed in the build environment. See [the validation report](docs/final-validation-report.md) for evidence and limits. This is a tested portfolio application with production engineering foundations. Commercial production readiness requires the remaining deployment and operational validation.
+
+## Development
+
+```sh
+npm ci
+node scripts/setup.mjs
+docker compose up -d postgres redis
+npm run db:generate
+npm run build:packages
+npm run db:deploy
+npm run db:seed
+npm run dev
+```
+
+In development the TaskFlow web frontend uses port 4101 and its API uses 4100. The dashboard proxies `/v1` to the API for same origin cookies and CSRF.
+
+```sh
+npm run lint
+npm run typecheck
+npm test
+npm run build
+npm run test:integration
+npm run test:e2e
+```
+
+The final two commands require seeded running services; the browser command also requires `npx playwright install chromium`. Integration checks create disposable test organizations and alter demo customers. Run them against a dedicated sandbox.
+
+## Documentation
+
+Start with [architecture](docs/architecture.md), [demo walkthrough](docs/demo.md), [deployment](docs/deployment.md), [SDK guide](docs/sdk-guide.md), [operations](docs/operations/runbook.md) and [interview guide](docs/interview-guide.md). The dated validation report describes what was verified; design decisions describe intent, not proof of readiness.
