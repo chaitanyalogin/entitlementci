@@ -134,9 +134,14 @@ function AppShell({ children }: { children: ReactNode }) {
   const projects = usePageData("/v1/projects");
   const signout = useMutation({
     mutationFn: () => api("/v1/auth/logout", { method: "POST" }),
-    onSuccess: () => {
-      qc.clear();
-      navTo("/login");
+    onSuccess: async () => {
+      await qc.cancelQueries();
+      qc.removeQueries({
+        predicate: (query) =>
+          query.queryKey.length !== 1 || query.queryKey[0] !== "/v1/auth/me",
+      });
+      qc.setQueryData(["/v1/auth/me"], null);
+      navTo("/login", { replace: true });
     },
   });
   const active = loc.pathname.split("/")[1] || "overview";
@@ -1012,7 +1017,7 @@ export function App() {
     retry: false,
   });
   if (me.isLoading) return <Loading />;
-  if (me.isError) return <Login />;
+  if (me.isError || !me.data) return <Login />;
   return (
     <AppShell>
       <RouterView />

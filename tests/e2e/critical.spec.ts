@@ -40,4 +40,10 @@ test("sign in, detect an upgrade failure, resolve the evidence, sign out", async
   await expect(
     page.getByRole("button", { name: "Sign in", exact: true }),
   ).toBeVisible();
+  expect((await page.request.get("/v1/auth/me")).status()).toBe(401);
+  await page.reload();
+  await page.getByRole("button", { name: "Sign in", exact: true }).click();
+  await expect(
+    page.getByRole("heading", { name: "Overview", exact: true }),
+  ).toBeVisible();
 });
