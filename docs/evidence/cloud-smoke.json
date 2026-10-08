@@ -1,0 +1,66 @@
+{
+  "date": "2026-10-08T08:11:47.516Z",
+  "base": "https://api-production-48225.up.railway.app",
+  "conclusion": "PASS",
+  "checks": [
+    {
+      "name": "HTTPS API, database and Redis readiness",
+      "status": "PASS"
+    },
+    {
+      "name": "Dashboard and deep links served on API origin",
+      "status": "PASS"
+    },
+    {
+      "name": "New organization has secure session cookies",
+      "status": "PASS"
+    },
+    {
+      "name": "Sign in with new credentials",
+      "status": "PASS"
+    },
+    {
+      "name": "Subscription catalog and scoped SDK key creation",
+      "status": "PASS"
+    },
+    {
+      "name": "Live worker detects denied Enterprise access",
+      "status": "PASS"
+    },
+    {
+      "name": "Repeated failures group into one incident",
+      "status": "PASS"
+    },
+    {
+      "name": "Corrected access automatically resolves incident",
+      "status": "PASS"
+    },
+    {
+      "name": "Tenant isolation denies another organization",
+      "status": "PASS"
+    },
+    {
+      "name": "CSRF rejection and disabled demo controls",
+      "status": "PASS"
+    },
+    {
+      "name": "Revoked SDK key cannot submit events",
+      "status": "PASS"
+    },
+    {
+      "name": "Sign out invalidates server session",
+      "status": "PASS"
+    }
+  ],
+  "fixtures": [
+    {
+      "organizationId": "cmuz98syp0001lo01l09m59dh",
+      "userId": "cmuz98syl0000lo015zpxa652"
+    },
+    {
+      "organizationId": "cmuz9bcnm001blo01kb1l8vp1",
+      "userId": "cmuz9bcnj001alo01l0fmvixd"
+    }
+  ],
+  "fixturePolicy": "Two synthetic organizations remain as verification evidence. Passwords are discarded, SDK key revoked and sessions ended."
+}

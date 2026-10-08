@@ -4,7 +4,11 @@ A SaaS reliability project that detects the difference between subscription prom
 
 **Live reviewer demo:** https://entitlementci-review.vercel.app/
 
-The public demo runs the shared deterministic comparison engine with sample data in the browser. The complete local application adds Fastify, PostgreSQL, Prisma, Redis, BullMQ, a Node SDK, signed Stripe webhooks and a separate TaskFlow application. The hosted demo does not contain a deployed production backend.
+**Live backend and dashboard:** https://api-production-48225.up.railway.app/
+
+The reviewer demo uses sample data in the browser. The separate Railway application runs the real Fastify API, React dashboard, PostgreSQL, Redis and BullMQ worker. Create an organization on its login page to use it. Local demo accounts and Drift Lab controls are disabled on Railway; the full TaskFlow regression demonstration remains available in the local sandbox.
+
+Railway hosting uses metered resources and its trial credits are limited. Deployment and verification evidence is in [the deployment report](docs/cloud-deployment.md).
 
 ## Why this project is distinctive
 

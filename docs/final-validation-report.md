@@ -35,6 +35,12 @@ The public deployment is a reviewer frontend with browser sample state. The full
 
 The worker recovers persisted unqueued observations and RECEIVED webhook records. Jobs that exhaust retries and records marked FAILED require operator intervention; there is no dashboard dead letter replay tool. Synthetic test enqueue recovery is not part of that inbox loop. The database uses application tenant checks without row level security.
 
-## Classification
+## Live Railway deployment
+
+The API/dashboard, worker, PostgreSQL 18 and Redis 8.2 are online on Railway for application commit `f7670c3c456b6036046b32a42f6d8bc997f63db8`. Railway built the Docker image and applied both migrations. [CI run #4](https://github.com/chaitanyalogin/entitlementci/actions/runs/37747462000) passed with ten unit/security tests, eighteen integration checks and the browser flow. Twelve independent HTTP checks passed against the actual hosted backend. See [the deployment report](cloud-deployment.md) and [live evidence](evidence/cloud-smoke.json).
+
+The earlier "not executed" list describes the earlier release environment. The application Docker image has now built and started successfully on Railway. Remaining resilience, operational, billing/trial and provider integration limits are described in the deployment report.
+
+## Classification after deployment
 
 A verified portfolio application with production engineering foundations. Commercial production readiness requires the remaining deployment, security, resilience and operational gates. GitHub CI passed for the application commit linked above. The application container configuration was confirmed locally by the user; dedicated resilience and production operations tests remain necessary.

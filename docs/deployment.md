@@ -2,15 +2,16 @@
 
 ## Actual deployment
 
-The public reviewer demo is deployed at https://entitlementci-review.vercel.app/. It contains static React assets and browser sample state. No database, worker, API, private customer data or secrets are included. The full backend was not deployed because managed PostgreSQL and Redis credentials were not available.
+The public reviewer demo at https://entitlementci-review.vercel.app/ contains static React assets and browser sample state.
+
+The full API, dashboard, worker, PostgreSQL 18 and Redis 8.2 were deployed separately on Railway on 8 October 2026. The dashboard and API share https://api-production-48225.up.railway.app/. Both migrations applied successfully and all four services reported healthy. Twelve checks passed against the actual live backend, including incident creation, grouping, resolution, tenant isolation, CSRF, revocation and sign out. [Deployment evidence](cloud-deployment.md) records the tested application commit and limitations.
 
 ## Local containers
 
-The full backend has a Railway deployment path in
+The full backend's Railway deployment settings are in
 [`infrastructure/railway/README.md`](../infrastructure/railway/README.md).
 Its dedicated Node image serves the dashboard with the API, supports host
-assigned ports and includes a separate worker healthcheck. Check the latest
-deployment evidence before claiming that backend is publicly deployed.
+assigned ports and includes a separate worker healthcheck.
 
 Run `node scripts/setup.mjs` then `docker compose up --build -d`. The root Dockerfile defines build, runtime and web stages. Compose starts PostgreSQL 17, Redis 7 with AOF persistence, a one shot migration and seed service, API, worker, TaskFlow and nginx. Ports bind to loopback. This is a development sandbox with default database credentials and development cookie settings.
 

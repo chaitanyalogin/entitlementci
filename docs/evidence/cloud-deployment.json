@@ -1,0 +1,38 @@
+{
+  "date": "2026-10-08",
+  "url": "https://api-production-48225.up.railway.app/",
+  "provider": "Railway",
+  "applicationCommit": "f7670c3c456b6036046b32a42f6d8bc997f63db8",
+  "ci": {
+    "runId": 37747462000,
+    "url": "https://github.com/chaitanyalogin/entitlementci/actions/runs/37747462000",
+    "conclusion": "success",
+    "unitSecurityTests": 10,
+    "integrationChecks": 18
+  },
+  "services": [
+    {
+      "name": "worker",
+      "state": "online",
+      "deploymentId": "83b870a1-f1bd-4f6d-b5be-c62d7cd9aa46"
+    },
+    {
+      "name": "api",
+      "state": "online",
+      "deploymentId": "b9adfabd-f2fc-42b9-b531-29ddf2385bee"
+    },
+    {
+      "name": "Redis",
+      "state": "online",
+      "deploymentId": "0e90c326-4b37-4e34-8f61-7a000510d6ca"
+    },
+    {
+      "name": "Postgres",
+      "state": "online",
+      "deploymentId": "c091c561-1df8-44e5-b7ae-749e43f5794e"
+    }
+  ],
+  "liveSmokeChecks": 12,
+  "publicDatabaseTcpProxies": 0,
+  "paidUpgradePerformed": false
+}
