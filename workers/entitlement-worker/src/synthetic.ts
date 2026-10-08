@@ -1,5 +1,7 @@
 import { createHmac, randomUUID } from "node:crypto";
 import type { PrismaClient, Prisma } from "@prisma/client";
+import { SANDBOX_KIND } from "@entitlementci/shared";
+import { runHostedRegression } from "./hosted-synthetic.js";
 export async function runSynthetic(db: PrismaClient, runId: string) {
   const run = await db.testRun.findUniqueOrThrow({
     where: { id: runId },
@@ -9,6 +11,9 @@ export async function runSynthetic(db: PrismaClient, runId: string) {
     where: { id: run.id },
     data: { status: "RUNNING", startedAt: new Date() },
   });
+  if ((run.scenario.definition as { kind?: string })?.kind === SANDBOX_KIND) {
+    return runHostedRegression(db, run);
+  }
   const base = process.env.TASKFLOW_URL ?? "http://localhost:4100";
   const definition = run.scenario.definition as unknown as {
     customerId?: string;

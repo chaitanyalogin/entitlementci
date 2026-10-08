@@ -53,3 +53,4 @@ export const SEVERITIES: Severity[] = ["CRITICAL", "HIGH", "MEDIUM", "LOW"];
 export { compareEntitlements } from "./comparison.js";
 
 export { redactMetadata } from "./redaction.js";
+export * from "./sandbox.js";

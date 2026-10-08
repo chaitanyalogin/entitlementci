@@ -6,7 +6,7 @@ A SaaS reliability project that detects the difference between subscription prom
 
 **Live backend and dashboard:** https://api-production-48225.up.railway.app/
 
-The reviewer demo uses sample data in the browser. The separate Railway application runs the real Fastify API, React dashboard, PostgreSQL, Redis and BullMQ worker. Create an organization on its login page to use it. Local demo accounts and Drift Lab controls are disabled on Railway; the full TaskFlow regression demonstration remains available in the local sandbox.
+The reviewer demo uses sample data in the browser. The separate Railway application runs the real Fastify API, React dashboard, PostgreSQL, Redis and BullMQ worker. Click **Try live demo** for a private visitor sandbox without signup, or create an organization and open **Drift Lab → Create sample workspace**. Hosted sample observations travel through the Node SDK, API, database, queue, and worker; each organization has a separate staging project. The original external TaskFlow application remains available locally. See [hosted sandbox details](docs/hosted-demo.md).
 
 Railway hosting uses metered resources and its trial credits are limited. Deployment and verification evidence is in [the deployment report](docs/cloud-deployment.md).
 

@@ -14,6 +14,7 @@
     "test": "vitest run"
   },
   "dependencies": {
+    "@entitlementci/node": "1.0.0",
     "@entitlementci/config": "1.0.0",
     "@entitlementci/shared": "1.0.0",
     "@entitlementci/validation": "1.0.0",

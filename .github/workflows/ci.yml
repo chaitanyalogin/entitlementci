@@ -55,12 +55,21 @@ jobs:
         run: |
           mkdir -p ci-logs
           node --env-file=.env apps/api/dist/server.js > ci-logs/api.log 2>&1 &
-          node --env-file=.env workers/entitlement-worker/dist/worker.js > ci-logs/worker.log 2>&1 &
+          ENABLE_HOSTED_DEMO=true node --env-file=.env workers/entitlement-worker/dist/worker.js > ci-logs/worker.log 2>&1 &
           (cd apps/demo-taskflow && node --env-file=../../.env dist/server.js) > ci-logs/taskflow.log 2>&1 &
           (cd apps/web && ../../node_modules/.bin/vite --host 127.0.0.1) > ci-logs/web.log 2>&1 &
           node scripts/wait-ready.mjs
           npm run test:integration
           npm run test:e2e
+      - name: Verify hosted visitor sandbox
+        run: |
+          ENABLE_HOSTED_DEMO=true PORT=4001 SERVE_WEB=true PUBLIC_WEB_URL=http://127.0.0.1:4001 PUBLIC_API_URL=http://127.0.0.1:4001 CORS_ORIGIN=http://127.0.0.1:4001 node --env-file=.env apps/api/dist/server.js > ci-logs/hosted-api.log 2>&1 &
+          for attempt in $(seq 1 60); do
+            if curl --fail --silent http://127.0.0.1:4001/ready; then break; fi
+            sleep 1
+          done
+          ENABLE_HOSTED_WRITE_TESTS=true TEST_API_URL=http://127.0.0.1:4001 node tests/integration/hosted-demo.mjs
+          ENABLE_HOSTED_E2E=true TEST_WEB_URL=http://127.0.0.1:4001 npm --workspace tests exec -- playwright test e2e/hosted.spec.ts
       - uses: actions/upload-artifact@v4
         if: always()
         with:

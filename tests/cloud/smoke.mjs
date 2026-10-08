@@ -213,7 +213,7 @@ try {
       204,
     );
   });
-  await check("CSRF rejection and disabled demo controls", async () => {
+  await check("CSRF rejection protects catalog and demo controls", async () => {
     assert.equal(
       (
         await request(
@@ -227,9 +227,14 @@ try {
     );
     assert.equal(
       (
-        await request("/v1/demo/run", "POST", {
-          scenario: "upgrade-propagation",
-        })
+        await request(
+          "/v1/demo/run",
+          "POST",
+          {
+            scenario: "upgrade-propagation",
+          },
+          { "x-csrf-token": "invalid" },
+        )
       ).response.status,
       403,
     );

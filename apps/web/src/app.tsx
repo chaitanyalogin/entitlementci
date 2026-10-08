@@ -32,6 +32,22 @@ function Login() {
   );
   const [pw, setPw] = useState(import.meta.env.DEV ? "DemoPassword!123" : "");
   const [error, setError] = useState("");
+  const demoConfig = useQuery({
+    queryKey: ["demo-config"],
+    queryFn: () => api<{ hosted: boolean }>("/v1/demo/config"),
+    retry: false,
+  });
+  const demo = useMutation({
+    mutationFn: () => api("/v1/auth/demo", { method: "POST", body: "{}" }),
+    onSuccess: async () => {
+      qc.removeQueries({
+        predicate: (query) => query.queryKey[0] !== "/v1/auth/me",
+      });
+      await qc.invalidateQueries({ queryKey: ["/v1/auth/me"] });
+      nav("/drift-lab");
+    },
+    onError: (err) => setError(err.message),
+  });
   async function submit(e: any) {
     e.preventDefault();
     try {
@@ -92,6 +108,21 @@ function Login() {
         >
           {register ? "Use an existing account" : "Create an organization"}
         </button>
+        {demoConfig.data?.hosted ? (
+          <>
+            <button
+              type="button"
+              disabled={demo.isPending}
+              onClick={() => demo.mutate()}
+            >
+              {demo.isPending ? "Preparing your demo…" : "Try live demo"}
+            </button>
+            <p className="subtitle">
+              No signup needed. Your own sample workspace, with a session
+              lasting one hour.
+            </p>
+          </>
+        ) : null}
       </form>
     </div>
   );
